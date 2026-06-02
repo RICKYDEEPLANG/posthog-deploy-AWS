@@ -84,6 +84,7 @@ services:
             service: worker
         logging: *default-logging
         environment:
+            KAFKA_HOSTS: 'kafka:9092'
             SITE_URL: https://$DOMAIN
             SECRET_KEY: $POSTHOG_SECRET
             OBJECT_STORAGE_ACCESS_KEY_ID: 'object_storage_root_user'
@@ -133,6 +134,7 @@ services:
             - ./compose:/compose
         image: $REGISTRY_URL:$POSTHOG_APP_TAG
         environment:
+            KAFKA_HOSTS: 'kafka:9092'
             SITE_URL: https://$DOMAIN
             LIVESTREAM_HOST: 'https://${DOMAIN}/livestream'
             SECRET_KEY: $POSTHOG_SECRET
