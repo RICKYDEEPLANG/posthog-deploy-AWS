@@ -63,18 +63,18 @@ services:
       - /:/rootfs:ro
     network_mode: host
 
-  portainer:
-    image: portainer/portainer-ce:latest
-    container_name: portainer
-    restart: unless-stopped
-    ports:
-      - "9000:9000"
-      - "9443:9443"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - portainer-data:/data
-    networks:
-      - new_deploy_default
+  # portainer:
+  #   image: portainer/portainer-ce:latest
+  #   container_name: portainer
+  #   restart: unless-stopped
+  #   ports:
+  #     - "9000:9000"
+  #     - "9443:9443"
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #     - portainer-data:/data
+  #   networks:
+  #     - new_deploy_default
 
   kafka-exporter:
     image: danielqsj/kafka-exporter:latest
@@ -101,7 +101,7 @@ services:
 volumes:
   prometheus-data:
   grafana-data:
-  portainer-data:
+  # portainer-data:
 
 networks:
   new_deploy_default:
