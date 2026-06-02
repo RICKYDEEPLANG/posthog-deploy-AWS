@@ -14,7 +14,7 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     networks:
-      - default
+      - new_deploy_default
 
   grafana:
     image: grafana/grafana:latest
@@ -29,7 +29,7 @@ services:
     volumes:
       - grafana-data:/var/lib/grafana
     networks:
-      - default
+      - new_deploy_default
 
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:latest
@@ -74,9 +74,35 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer-data:/data
     networks:
-      - default
+      - new_deploy_default
+
+  kafka-exporter:
+    image: danielqsj/kafka-exporter:latest
+    container_name: kafka-exporter
+    restart: unless-stopped
+    ports:
+      - "9308:9308"
+    command:
+      - '--kafka.server=new_deploy-kafka-1:9092'
+    networks:
+      - new_deploy_default
+
+  clickhouse-exporter:
+    image: f1yegor/clickhouse-exporter:latest
+    container_name: clickhouse-exporter
+    restart: unless-stopped
+    ports:
+      - "9116:9116"
+    command:
+      - '-scrape_uri=http://new_deploy-clickhouse-1:8123/'
+    networks:
+      - new_deploy_default
 
 volumes:
   prometheus-data:
   grafana-data:
   portainer-data:
+
+networks:
+  new_deploy_default:
+    external: true

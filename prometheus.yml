@@ -22,3 +22,11 @@ scrape_configs:
     static_configs:
       - targets: ['capture:3000']
     metrics_path: '/metrics'
+
+  - job_name: 'kafka'
+    static_configs:
+      - targets: ['kafka-exporter:9308']
+
+  - job_name: 'clickhouse'
+    static_configs:
+      - targets: ['clickhouse-exporter:9116']
