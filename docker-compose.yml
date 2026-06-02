@@ -437,6 +437,54 @@ services:
             - seaweedfs
             - temporal
 
+    temporal-django-worker-data-warehouse:
+        command: /compose/temporal-django-worker --task-queue data-warehouse-task-queue
+        extends:
+            file: docker-compose.base.yml
+            service: temporal-django-worker
+        logging: *default-logging
+        volumes:
+            - ./compose:/compose
+        image: $REGISTRY_URL:$POSTHOG_APP_TAG
+        environment:
+            SITE_URL: https://$DOMAIN
+            SECRET_KEY: $POSTHOG_SECRET
+            TEMPORAL_TASK_QUEUE: data-warehouse-task-queue
+        depends_on:
+            - db
+            - redis7
+            - clickhouse
+            - kafka
+            - objectstorage
+            - seaweedfs
+            - temporal
+
+    temporal-django-worker-max-ai:
+        command: /compose/temporal-django-worker --task-queue max-ai-task-queue
+        extends:
+            file: docker-compose.base.yml
+            service: temporal-django-worker
+        logging: *default-logging
+        volumes:
+            - ./compose:/compose
+        image: $REGISTRY_URL:$POSTHOG_APP_TAG
+        environment:
+            SITE_URL: https://$DOMAIN
+            SECRET_KEY: $POSTHOG_SECRET
+            TEMPORAL_TASK_QUEUE: max-ai-task-queue
+            OPENAI_API_KEY: ${OPENAI_API_KEY}
+            OPENAI_BASE_URL: ${OPENAI_BASE_URL}
+            ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+            ANTHROPIC_BASE_URL: ${ANTHROPIC_BASE_URL}
+        depends_on:
+            - db
+            - redis7
+            - clickhouse
+            - kafka
+            - objectstorage
+            - seaweedfs
+            - temporal
+
     cyclotron-janitor:
         extends:
             file: docker-compose.base.yml
