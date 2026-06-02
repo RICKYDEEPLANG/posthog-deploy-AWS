@@ -201,12 +201,18 @@ services:
         volumes:
             - ./share:/share
         depends_on:
-            - db
-            - redis7
-            - clickhouse
-            - kafka
-            - objectstorage
-            - seaweedfs
+            db:
+                condition: service_healthy
+            redis7:
+                condition: service_healthy
+            clickhouse:
+                condition: service_started
+            kafka:
+                condition: service_healthy
+            objectstorage:
+                condition: service_started
+            seaweedfs:
+                condition: service_healthy
 
     ingestion-general:
         extends:
