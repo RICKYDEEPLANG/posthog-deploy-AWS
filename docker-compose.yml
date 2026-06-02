@@ -100,6 +100,15 @@ services:
             PERSONHOG_ADDR: 'personhog-router:50052'
             PERSONHOG_ENABLED: 'true'
             PERSONHOG_ROLLOUT_PERCENTAGE: '100'
+            # 邮件配置
+            EMAIL_HOST: ${EMAIL_HOST}
+            EMAIL_PORT: ${EMAIL_PORT}
+            EMAIL_HOST_USER: ${EMAIL_HOST_USER}
+            EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
+            EMAIL_USE_SSL: ${EMAIL_USE_SSL}
+            EMAIL_USE_TLS: ${EMAIL_USE_TLS}
+            DEFAULT_FROM_EMAIL: ${DEFAULT_FROM_EMAIL}
+            EMAIL_ENABLED: ${EMAIL_ENABLED}
         image: $REGISTRY_URL:$POSTHOG_APP_TAG
         depends_on:
             db:
@@ -145,6 +154,18 @@ services:
             PERSONHOG_ADDR: 'personhog-router:50052'
             PERSONHOG_ENABLED: 'true'
             PERSONHOG_ROLLOUT_PERCENTAGE: '100'
+            # AI API 配置 (OpenRouter)
+            OPENAI_API_KEY: ${OPENAI_API_KEY}
+            OPENAI_BASE_URL: ${OPENAI_BASE_URL}
+            # 邮件配置
+            EMAIL_HOST: ${EMAIL_HOST}
+            EMAIL_PORT: ${EMAIL_PORT}
+            EMAIL_HOST_USER: ${EMAIL_HOST_USER}
+            EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
+            EMAIL_USE_SSL: ${EMAIL_USE_SSL}
+            EMAIL_USE_TLS: ${EMAIL_USE_TLS}
+            DEFAULT_FROM_EMAIL: ${DEFAULT_FROM_EMAIL}
+            EMAIL_ENABLED: ${EMAIL_ENABLED}
         depends_on:
             - db
             - redis7
@@ -170,6 +191,8 @@ services:
             OBJECT_STORAGE_ENABLED: true
             CDP_REDIS_HOST: redis7
             CDP_REDIS_PORT: 6379
+            LOGS_REDIS_HOST: redis7
+            LOGS_REDIS_PORT: 6379
             ENCRYPTION_SALT_KEYS: $ENCRYPTION_SALT_KEYS
             CYCLOTRON_DATABASE_URL: 'postgres://posthog:posthog@db:5432/posthog'
             PERSONS_DATABASE_URL: 'postgres://posthog:posthog@db:5432/posthog'
@@ -273,8 +296,8 @@ services:
             service: proxy
         logging: *default-logging
         ports:
-            - '80:80'
-            - '443:443'
+            - '8080:80'
+            - '8443:443'
         volumes:
             - caddy-data:/data
             - caddy-config:/config
@@ -284,6 +307,21 @@ services:
         depends_on:
             - web
             - livestream
+            - feishu-quick-login
+
+    feishu-quick-login:
+        build: ./feishu-quick-login
+        container_name: posthog-feishu-quick-login
+        restart: unless-stopped
+        environment:
+            - FEISHU_APP_ID=${FEISHU_APP_ID}
+            - FEISHU_APP_SECRET=${FEISHU_APP_SECRET}
+            - POSTHOG_URL=http://web:8000
+            - POSTHOG_EXTERNAL_URL=https://${DOMAIN}
+            - REDIRECT_URI=https://${DOMAIN}/feishu-login/callback
+        volumes:
+            - ./feishu-quick-login/users.json:/app/users.json:ro
+
     objectstorage:
         extends:
             file: docker-compose.base.yml
