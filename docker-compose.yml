@@ -480,6 +480,7 @@ services:
         volumes:
             - ./compose:/compose
             - ./posthog/ee/hogai/core/agent_modes/compaction_manager.py:/code/ee/hogai/core/agent_modes/compaction_manager.py
+            - ./posthog/ee/hogai/chat_agent/toolkit.py:/code/ee/hogai/chat_agent/toolkit.py
         image: $REGISTRY_URL:$POSTHOG_APP_TAG
         environment:
             SITE_URL: https://$DOMAIN
