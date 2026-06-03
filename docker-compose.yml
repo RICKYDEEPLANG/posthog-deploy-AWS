@@ -479,6 +479,7 @@ services:
         logging: *default-logging
         volumes:
             - ./compose:/compose
+            - ./posthog/ee/hogai/core/agent_modes/compaction_manager.py:/code/ee/hogai/core/agent_modes/compaction_manager.py
         image: $REGISTRY_URL:$POSTHOG_APP_TAG
         environment:
             SITE_URL: https://$DOMAIN
