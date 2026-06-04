@@ -325,6 +325,7 @@ services:
         environment:
             CADDY_TLS_BLOCK: $TLS_BLOCK
             CADDY_HOST: '$DOMAIN, http://, https://'
+            CADDY_EXTRA_CONFIG: $CADDY_EXTRA_CONFIG
         depends_on:
             - web
             - livestream
