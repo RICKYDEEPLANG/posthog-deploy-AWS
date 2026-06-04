@@ -325,10 +325,6 @@ services:
         environment:
             CADDY_TLS_BLOCK: $TLS_BLOCK
             CADDY_HOST: '$DOMAIN, http://, https://'
-            CADDY_EXTRA_CONFIG: |
-                    handle /mcp* {
-                        reverse_proxy posthog-mcp:3001
-                    }
         depends_on:
             - web
             - livestream

@@ -143,6 +143,10 @@ services:
                         reverse_proxy feishu-quick-login:5000
                     }
 
+                    handle /mcp* {
+                        reverse_proxy posthog-mcp:3001
+                    }
+
                     handle {
                         reverse_proxy web:8000
                     }
