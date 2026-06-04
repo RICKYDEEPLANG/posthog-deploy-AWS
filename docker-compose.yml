@@ -695,6 +695,23 @@ services:
             redis7:
                 condition: service_healthy
 
+    posthog-mcp:
+        build:
+            context: ./posthog
+            dockerfile: services/mcp/Dockerfile
+        ports:
+            - "3001:3001"
+        environment:
+            NODE_ENV: production
+            PORT: 3001
+            POSTHOG_HOST: http://web:8000
+            POSTHOG_API_URL: http://web:8000
+        depends_on:
+            - web
+            - db
+        restart: unless-stopped
+        logging: *default-logging
+
 volumes:
     zookeeper-data:
     zookeeper-datalog:
