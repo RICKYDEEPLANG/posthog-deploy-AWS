@@ -707,6 +707,7 @@ services:
             PORT: 3001
             POSTHOG_HOST: http://web:8000
             POSTHOG_API_URL: http://web:8000
+            POSTHOG_API_BASE_URL: http://web:8000
             REDIS_URL: redis://redis7:6379/
         depends_on:
             - web
