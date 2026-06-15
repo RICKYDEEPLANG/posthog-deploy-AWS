@@ -180,6 +180,8 @@ services:
             EMAIL_USE_TLS: ${EMAIL_USE_TLS}
             DEFAULT_FROM_EMAIL: ${DEFAULT_FROM_EMAIL}
             EMAIL_ENABLED: ${EMAIL_ENABLED}
+            IS_BEHIND_PROXY: 'true'
+            TRUST_ALL_PROXIES: 'true'
         depends_on:
             - db
             - redis7
