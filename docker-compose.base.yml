@@ -16,6 +16,9 @@ services:
             CADDY_EXTRA_CONFIG: ''
             CADDYFILE: |
                 {
+                    servers {
+                        trusted_proxies static private_ranges
+                    }
                 ${CADDY_TLS_BLOCK:-}
                 }
                 ${CADDY_HOST:-http://localhost:8000} {
